@@ -14,7 +14,7 @@ const userAttributes = [
   { id: 'companyName', name: 'Company Name' },
   { id: 'lastName', name: 'Last Name' },
   { id: 'firstName', name: 'First Name' },
-  { id: 'country', name: 'Country' }
+  { id: 'countryCode', name: 'Country' }
 ];
 
 const userDataIdsMap = userAttributes.reduce((previousValue, currentValue) => {
