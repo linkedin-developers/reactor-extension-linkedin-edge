@@ -46,6 +46,7 @@ const buildFetchObject = async ({
     headers: {
       'Content-Type': 'application/json',
       'LinkedIn-Version': version,
+      'X-Restli-Protocol-Version': '2.0.0',
       Authorization: `Bearer ${accessToken}`
     },
     body: JSON.stringify(event)
@@ -54,11 +55,19 @@ const buildFetchObject = async ({
 
 module.exports = async ({ utils }) => {
   const { getExtensionSettings, getSettings, fetch } = utils;
-  let { authentication } = getExtensionSettings();
-  const settings = getSettings();
-  if (settings.authentication) {
-    authentication = settings.authentication;
-    delete settings.authentication;
+  const extensionSettings = getExtensionSettings() || {};
+  let authentication = extensionSettings.authentication || {};
+  const { authentication: settingsAuth, ...settings } = getSettings() || {};
+  if (settingsAuth) {
+    authentication = settingsAuth;
+  }
+
+  if (!authentication.accessToken) {
+    throw new Error(
+      'LinkedIn access token is required. Create an access token by configuring a Secret ' +
+        'in Event Forwarding with the LinkedIn OAuth 2 type, then reference it in the ' +
+        'extension or action settings.'
+    );
   }
 
   const url = 'https://api.linkedin.com/rest/conversionEvents';
