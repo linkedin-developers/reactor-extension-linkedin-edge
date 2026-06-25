@@ -55,11 +55,19 @@ const buildFetchObject = async ({
 
 module.exports = async ({ utils }) => {
   const { getExtensionSettings, getSettings, fetch } = utils;
-  let { authentication } = getExtensionSettings();
-  const settings = getSettings();
-  if (settings.authentication) {
-    authentication = settings.authentication;
-    delete settings.authentication;
+  const extensionSettings = getExtensionSettings() || {};
+  let authentication = extensionSettings.authentication || {};
+  const rawSettings = getSettings() || {};
+
+  const { authentication: settingsAuth, ...settings } = rawSettings;
+  if (settingsAuth) {
+    authentication = settingsAuth;
+  }
+
+  if (!authentication.accessToken) {
+    throw new Error(
+      'LinkedIn access token is required. Configure it in extension settings or action settings.'
+    );
   }
 
   const url = 'https://api.linkedin.com/rest/conversionEvents';
