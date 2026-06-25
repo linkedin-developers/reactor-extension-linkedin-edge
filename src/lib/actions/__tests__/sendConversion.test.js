@@ -235,4 +235,45 @@ describe('Send Conversion library module', () => {
       );
     });
   });
+
+  test('throws a clear error when access token is missing', async () => {
+    const fetch = jest.fn(() => Promise.resolve({}));
+
+    const utils = {
+      fetch,
+      getSettings: () => ({
+        user_identification: { sha256_email: 'email@email.com' },
+        event: { conversion: '12345', conversionHappenedAt: 123 }
+      }),
+      getExtensionSettings: () => ({ authentication: {} })
+    };
+
+    await expect(sendWebConversion({ arc, utils })).rejects.toThrow(
+      'LinkedIn access token is required. Configure it in extension settings or action settings.'
+    );
+  });
+
+  test('does not crash when getExtensionSettings returns undefined', async () => {
+    const fetch = jest.fn(() => Promise.resolve({}));
+
+    const utils = {
+      fetch,
+      getSettings: () => ({
+        user_identification: { sha256_email: 'email@email.com' },
+        event: { conversion: '12345', conversionHappenedAt: 123 },
+        authentication: { accessToken: 'token-from-settings' }
+      }),
+      getExtensionSettings: () => undefined
+    };
+
+    await expect(sendWebConversion({ arc, utils })).resolves.toBeDefined();
+    expect(fetch).toHaveBeenCalledWith(
+      'https://api.linkedin.com/rest/conversionEvents',
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          Authorization: 'Bearer token-from-settings'
+        })
+      })
+    );
+  });
 });
