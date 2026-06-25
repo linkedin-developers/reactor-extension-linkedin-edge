@@ -63,7 +63,7 @@ module.exports = async ({ utils }) => {
 
   const url = 'https://api.linkedin.com/rest/conversionEvents';
   const method = 'POST';
-  const version = '202509';
+  const version = '202605';
 
   return fetch(
     url,
