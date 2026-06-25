@@ -57,9 +57,7 @@ module.exports = async ({ utils }) => {
   const { getExtensionSettings, getSettings, fetch } = utils;
   const extensionSettings = getExtensionSettings() || {};
   let authentication = extensionSettings.authentication || {};
-  const rawSettings = getSettings() || {};
-
-  const { authentication: settingsAuth, ...settings } = rawSettings;
+  const { authentication: settingsAuth, ...settings } = getSettings() || {};
   if (settingsAuth) {
     authentication = settingsAuth;
   }
