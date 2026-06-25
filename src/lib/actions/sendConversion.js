@@ -46,6 +46,7 @@ const buildFetchObject = async ({
     headers: {
       'Content-Type': 'application/json',
       'LinkedIn-Version': version,
+      'X-Restli-Protocol-Version': '2.0.0',
       Authorization: `Bearer ${accessToken}`
     },
     body: JSON.stringify(event)
