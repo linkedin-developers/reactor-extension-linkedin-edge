@@ -66,7 +66,9 @@ module.exports = async ({ utils }) => {
 
   if (!authentication.accessToken) {
     throw new Error(
-      'LinkedIn access token is required. Configure it in extension settings or action settings.'
+      'LinkedIn access token is required. Create an access token by configuring a Secret ' +
+        'in Event Forwarding with the LinkedIn OAuth 2 type, then reference it in the ' +
+        'extension or action settings.'
     );
   }
 

@@ -249,7 +249,9 @@ describe('Send Conversion library module', () => {
     };
 
     await expect(sendWebConversion({ arc, utils })).rejects.toThrow(
-      'LinkedIn access token is required. Configure it in extension settings or action settings.'
+      'LinkedIn access token is required. Create an access token by configuring a Secret ' +
+        'in Event Forwarding with the LinkedIn OAuth 2 type, then reference it in the ' +
+        'extension or action settings.'
     );
   });
 
