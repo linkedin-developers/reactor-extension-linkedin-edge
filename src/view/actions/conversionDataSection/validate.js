@@ -34,7 +34,7 @@ export default ({
     const v = Number(conversionHappenedAt);
     if (Number.isNaN(v)) {
       errors.conversionHappenedAt =
-        'The value of this fields must be a timestamp or a data element.';
+        'The value of this field must be a timestamp or a data element.';
     }
   }
 
