@@ -14,6 +14,31 @@ const { emailNormalizer } = require('./helpers/normalizers');
 
 /* eslint-disable camelcase */
 
+// Maps legacy user_data field names (from configs saved before a schema/view
+// rename) to their current equivalents so older action settings keep working.
+const LEGACY_USER_DATA_FIELD_MAP = Object.freeze({
+  country: 'countryCode'
+});
+
+const migrateLegacyUserData = (userData) => {
+  if (!userData) {
+    return userData;
+  }
+
+  const migrated = { ...userData };
+  Object.entries(LEGACY_USER_DATA_FIELD_MAP).forEach(
+    ([legacyKey, currentKey]) => {
+      if (Object.prototype.hasOwnProperty.call(migrated, legacyKey)) {
+        if (!Object.prototype.hasOwnProperty.call(migrated, currentKey)) {
+          migrated[currentKey] = migrated[legacyKey];
+        }
+        delete migrated[legacyKey];
+      }
+    }
+  );
+  return migrated;
+};
+
 const buildFetchObject = async ({
   settings: { event, user_identification, user_data },
   authentication: { accessToken },
@@ -34,7 +59,7 @@ const buildFetchObject = async ({
     idValue: user_identification[k]
   }));
   if (user_data) {
-    event.user.userInfo = user_data;
+    event.user.userInfo = migrateLegacyUserData(user_data);
   }
 
   if (Number(event.conversion) > 0) {
@@ -67,6 +92,13 @@ module.exports = async ({ utils }) => {
       'LinkedIn access token is required. Create an access token by configuring a Secret ' +
         'in Event Forwarding with the LinkedIn OAuth 2 type, then reference it in the ' +
         'extension or action settings.'
+    );
+  }
+
+  if (!settings.user_identification || !settings.event) {
+    throw new Error(
+      'LinkedIn conversion settings are missing required fields. Configure at least one ' +
+        'user identifier and the conversion event details in the action settings.'
     );
   }
 

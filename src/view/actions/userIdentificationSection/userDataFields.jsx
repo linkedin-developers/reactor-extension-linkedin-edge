@@ -13,7 +13,7 @@ import { Link } from '@adobe/react-spectrum';
 import React from 'react';
 
 export default {
-  country: {
+  countryCode: {
     description: (
       <span>
         Country as a string in{' '}
