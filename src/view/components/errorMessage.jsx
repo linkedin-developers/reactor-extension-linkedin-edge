@@ -18,7 +18,7 @@ export default function ErrorMessage({ message = 'There was an error!' }) {
   return (
     <IllustratedMessage marginTop="size-1000">
       <NotFound />
-      <Heading>An error has occured</Heading>
+      <Heading>An error has occurred</Heading>
       <Content>{message}</Content>
     </IllustratedMessage>
   );

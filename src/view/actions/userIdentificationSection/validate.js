@@ -27,7 +27,7 @@ export default ({
 
   if (!sha256_email && !linkedin_first_party_ads_tracking_uuid) {
     errors['user_identification.sha256_email'] =
-      'Please provide either an "Email" or a "LinkeIn First Party Ads Tracking UUID".';
+      'Please provide either an "Email" or a "LinkedIn First Party Ads Tracking UUID".';
   }
 
   if (userDataType === 'raw') {

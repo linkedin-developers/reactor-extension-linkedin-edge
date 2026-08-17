@@ -12,6 +12,6 @@ governing permissions and limitations under the License.
 
 export default (variable, value, errorVariableDescription, errors) => {
   if (!value) {
-    errors[variable] = `Please proivde ${errorVariableDescription}.`;
+    errors[variable] = `Please provide ${errorVariableDescription}.`;
   }
 };
