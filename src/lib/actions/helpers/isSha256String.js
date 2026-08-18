@@ -10,4 +10,5 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-module.exports = (data) => data.length === 64 && /^[0-9A-Za-z]*$/.test(data);
+module.exports = (data) =>
+  typeof data === 'string' && data.length === 64 && /^[0-9A-Fa-f]+$/.test(data);

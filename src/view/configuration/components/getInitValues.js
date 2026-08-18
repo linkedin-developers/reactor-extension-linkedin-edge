@@ -11,6 +11,5 @@ governing permissions and limitations under the License.
 */
 
 export default ({ settings }) => {
-  const authentication = settings?.authentication;
-  return { authentication };
+  return { authentication: settings?.authentication || {} };
 };
