@@ -14,8 +14,15 @@ const userAttributes = [
   { id: 'companyName', name: 'Company Name' },
   { id: 'lastName', name: 'Last Name' },
   { id: 'firstName', name: 'First Name' },
-  { id: 'country', name: 'Country' }
+  { id: 'countryCode', name: 'Country Code' }
 ];
+
+// Maps legacy user-data ids (from configs saved before a schema/view rename)
+// to their current equivalents, so old raw JSON keys normalize correctly
+// when the view builds settings and looks up field metadata.
+const LEGACY_ID_ALIASES = Object.freeze({
+  country: 'countryCode'
+});
 
 const userDataIdsMap = userAttributes.reduce((previousValue, currentValue) => {
   previousValue[currentValue.id] = currentValue.name;
@@ -30,7 +37,8 @@ const userDataNamesMap = userAttributes.reduce(
   {}
 );
 export default {
-  getUserDataId: (name) => userDataNamesMap[name] || name,
+  getUserDataId: (name) =>
+    userDataNamesMap[name] || LEGACY_ID_ALIASES[name] || name,
   getUserDataName: (id) => userDataIdsMap[id] || id,
   getUserDataNames: () =>
     userAttributes.map((userAttribute) => userAttribute.name)

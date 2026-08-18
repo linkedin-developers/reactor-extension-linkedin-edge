@@ -235,4 +235,127 @@ describe('Send Conversion library module', () => {
       );
     });
   });
+
+  test('throws a clear error when access token is missing', async () => {
+    const fetch = jest.fn(() => Promise.resolve({}));
+
+    const utils = {
+      fetch,
+      getSettings: () => ({
+        user_identification: { sha256_email: 'email@email.com' },
+        event: { conversion: '12345', conversionHappenedAt: 123 }
+      }),
+      getExtensionSettings: () => ({ authentication: {} })
+    };
+
+    await expect(sendWebConversion({ arc, utils })).rejects.toThrow(
+      'LinkedIn access token is required. Create an access token by configuring a Secret ' +
+        'in Event Forwarding with the LinkedIn OAuth 2 type, then reference it in the ' +
+        'extension or action settings.'
+    );
+  });
+
+  test('does not crash when getExtensionSettings returns undefined', async () => {
+    const fetch = jest.fn(() => Promise.resolve({}));
+
+    const utils = {
+      fetch,
+      getSettings: () => ({
+        user_identification: { sha256_email: 'email@email.com' },
+        event: { conversion: '12345', conversionHappenedAt: 123 },
+        authentication: { accessToken: 'token-from-settings' }
+      }),
+      getExtensionSettings: () => undefined
+    };
+
+    await expect(sendWebConversion({ arc, utils })).resolves.toBeDefined();
+    expect(fetch).toHaveBeenCalledWith(
+      'https://api.linkedin.com/rest/conversionEvents',
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          'X-Restli-Protocol-Version': '2.0.0',
+          Authorization: 'Bearer token-from-settings'
+        })
+      })
+    );
+  });
+
+  test('throws a clear error when user_identification or event settings are missing', async () => {
+    const fetch = jest.fn(() => Promise.resolve({}));
+
+    const utils = {
+      fetch,
+      getSettings: () => ({
+        authentication: { accessToken: 'tsecret' }
+      }),
+      getExtensionSettings: () => ({})
+    };
+
+    await expect(sendWebConversion({ arc, utils })).rejects.toThrow(
+      'LinkedIn conversion settings are missing required fields. Configure at least one ' +
+        'user identifier and the conversion event details in the action settings.'
+    );
+  });
+
+  test('throws a clear error when user_identification is an empty object', async () => {
+    const fetch = jest.fn(() => Promise.resolve({}));
+
+    const utils = {
+      fetch,
+      getSettings: () => ({
+        user_identification: {},
+        event: { conversion: '12345', conversionHappenedAt: 123 },
+        authentication: { accessToken: 'tsecret' }
+      }),
+      getExtensionSettings: () => ({})
+    };
+
+    await expect(sendWebConversion({ arc, utils })).rejects.toThrow(
+      'LinkedIn conversion settings are missing required fields. Configure at least one ' +
+        'user identifier and the conversion event details in the action settings.'
+    );
+  });
+
+  test('migrates legacy user_data.country to countryCode for backward compatibility', () => {
+    const fetch = jest.fn(() => Promise.resolve({}));
+
+    const utils = {
+      fetch,
+      getSettings: () => ({
+        user_identification: { sha256_email: 'email@email.com' },
+        user_data: { firstName: 'name', country: 'US' },
+        event: { conversion: '12345', conversionHappenedAt: 123 },
+        authentication: { accessToken: 'tsecret' }
+      }),
+      getExtensionSettings: () => ({})
+    };
+
+    return sendWebConversion({ arc, utils }).then(() => {
+      const fetchOptions = fetch.mock.calls[0][1];
+      const parsedBody = JSON.parse(fetchOptions.body);
+      expect(parsedBody.user.userInfo.countryCode).toBe('US');
+      expect(parsedBody.user.userInfo.country).toBeUndefined();
+      expect(parsedBody.user.userInfo.firstName).toBe('name');
+    });
+  });
+
+  test('omits userInfo when user_data is not configured', () => {
+    const fetch = jest.fn(() => Promise.resolve({}));
+
+    const utils = {
+      fetch,
+      getSettings: () => ({
+        user_identification: { sha256_email: 'email@email.com' },
+        event: { conversion: '12345', conversionHappenedAt: 123 },
+        authentication: { accessToken: 'tsecret' }
+      }),
+      getExtensionSettings: () => ({})
+    };
+
+    return sendWebConversion({ arc, utils }).then(() => {
+      const fetchOptions = fetch.mock.calls[0][1];
+      const parsedBody = JSON.parse(fetchOptions.body);
+      expect(parsedBody.user.userInfo).toBeUndefined();
+    });
+  });
 });

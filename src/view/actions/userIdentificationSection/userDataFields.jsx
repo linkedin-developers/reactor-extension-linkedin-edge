@@ -13,10 +13,10 @@ import { Link } from '@adobe/react-spectrum';
 import React from 'react';
 
 export default {
-  country: {
+  countryCode: {
     description: (
       <span>
-        Country as a string in{' '}
+        Country code as a string in{' '}
         <Link>
           <a
             href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2"

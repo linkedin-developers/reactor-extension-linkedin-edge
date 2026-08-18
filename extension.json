@@ -3,7 +3,7 @@
   "name": "linkedin-connector-edge",
   "iconPath": "resources/icons/linkedin-logo.svg",
   "platform": "edge",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Forward data to LinkedIn by using the LinkedIn Conversion API.",
   "author": {
     "name": "Adobe",
@@ -132,6 +132,10 @@
                 "minLength": 1
               },
               "firstName": {
+                "type": "string",
+                "minLength": 1
+              },
+              "countryCode": {
                 "type": "string",
                 "minLength": 1
               },
