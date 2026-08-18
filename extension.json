@@ -6,8 +6,9 @@
   "version": "1.5.0",
   "description": "Forward data to LinkedIn by using the LinkedIn Conversion API.",
   "author": {
-    "name": "Adobe",
-    "url": "http://adobe.com"
+    "name": "LinkedIn",
+    "url": "https://www.linkedin.com",
+    "email": "developer-relations@linkedin.com"
   },
   "exchangeUrl": "https://exchange.adobe.com/apps/ec/109946/linkedin-conversions-api",
   "viewBasePath": "dist/",
