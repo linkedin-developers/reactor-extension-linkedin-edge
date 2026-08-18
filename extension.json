@@ -138,6 +138,10 @@
               "countryCode": {
                 "type": "string",
                 "minLength": 1
+              },
+              "country": {
+                "type": "string",
+                "minLength": 1
               }
             },
             "additionalProperties": false
