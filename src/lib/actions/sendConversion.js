@@ -93,7 +93,13 @@ module.exports = async ({ utils }) => {
     );
   }
 
-  if (!settings.user_identification || !settings.event) {
+  if (
+    !settings.user_identification ||
+    typeof settings.user_identification !== 'object' ||
+    Object.keys(settings.user_identification).length === 0 ||
+    !settings.event ||
+    typeof settings.event !== 'object'
+  ) {
     throw new Error(
       'LinkedIn conversion settings are missing required fields. Configure at least one ' +
         'user identifier and the conversion event details in the action settings.'

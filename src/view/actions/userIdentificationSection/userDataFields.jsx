@@ -16,7 +16,7 @@ export default {
   countryCode: {
     description: (
       <span>
-        Country as a string in{' '}
+        Country code as a string in{' '}
         <Link>
           <a
             href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2"

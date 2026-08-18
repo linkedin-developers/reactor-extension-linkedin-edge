@@ -297,6 +297,25 @@ describe('Send Conversion library module', () => {
     );
   });
 
+  test('throws a clear error when user_identification is an empty object', async () => {
+    const fetch = jest.fn(() => Promise.resolve({}));
+
+    const utils = {
+      fetch,
+      getSettings: () => ({
+        user_identification: {},
+        event: { conversion: '12345', conversionHappenedAt: 123 },
+        authentication: { accessToken: 'tsecret' }
+      }),
+      getExtensionSettings: () => ({})
+    };
+
+    await expect(sendWebConversion({ arc, utils })).rejects.toThrow(
+      'LinkedIn conversion settings are missing required fields. Configure at least one ' +
+        'user identifier and the conversion event details in the action settings.'
+    );
+  });
+
   test('migrates legacy user_data.country to countryCode for backward compatibility', () => {
     const fetch = jest.fn(() => Promise.resolve({}));
 
