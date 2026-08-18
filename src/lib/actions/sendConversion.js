@@ -58,9 +58,7 @@ const buildFetchObject = async ({
     idType: k.toUpperCase(),
     idValue: user_identification[k]
   }));
-  if (user_data) {
-    event.user.userInfo = migrateLegacyUserData(user_data);
-  }
+  event.user.userInfo = migrateLegacyUserData(user_data);
 
   if (Number(event.conversion) > 0) {
     event.conversion = `urn:lla:llaPartnerConversion:${event.conversion}`;

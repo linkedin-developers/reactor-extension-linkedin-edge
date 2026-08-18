@@ -319,4 +319,24 @@ describe('Send Conversion library module', () => {
       expect(parsedBody.user.userInfo.firstName).toBe('name');
     });
   });
+
+  test('omits userInfo when user_data is not configured', () => {
+    const fetch = jest.fn(() => Promise.resolve({}));
+
+    const utils = {
+      fetch,
+      getSettings: () => ({
+        user_identification: { sha256_email: 'email@email.com' },
+        event: { conversion: '12345', conversionHappenedAt: 123 },
+        authentication: { accessToken: 'tsecret' }
+      }),
+      getExtensionSettings: () => ({})
+    };
+
+    return sendWebConversion({ arc, utils }).then(() => {
+      const fetchOptions = fetch.mock.calls[0][1];
+      const parsedBody = JSON.parse(fetchOptions.body);
+      expect(parsedBody.user.userInfo).toBeUndefined();
+    });
+  });
 });
