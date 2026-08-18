@@ -22,12 +22,26 @@ export default ({
   userDataJsonPairs
 }) => {
   const errors = {};
-  const { sha256_email, linkedin_first_party_ads_tracking_uuid } =
-    user_identification;
+  const {
+    sha256_email,
+    linkedin_first_party_ads_tracking_uuid,
+    gaid,
+    ip_address
+  } = user_identification;
 
-  if (!sha256_email && !linkedin_first_party_ads_tracking_uuid) {
-    errors['user_identification.sha256_email'] =
-      'Please provide either an "Email" or a "LinkedIn First Party Ads Tracking UUID".';
+  if (
+    !sha256_email &&
+    !linkedin_first_party_ads_tracking_uuid &&
+    !gaid &&
+    !ip_address
+  ) {
+    const msg =
+      // eslint-disable-next-line max-len
+      'Please provide an "Email", a "LinkedIn First Party Ads Tracking UUID", a "Google Advertising ID (GAID)", or an "IP Address".';
+    errors['user_identification.sha256_email'] = msg;
+    errors['user_identification.linkedin_first_party_ads_tracking_uuid'] = msg;
+    errors['user_identification.gaid'] = msg;
+    errors['user_identification.ip_address'] = msg;
   }
 
   if (userDataType === 'raw') {
