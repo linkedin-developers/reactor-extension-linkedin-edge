@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 */
 
 export default ({ authentication }) => {
-  if (authentication.accessToken) {
+  if (authentication?.accessToken) {
     return { authentication };
   }
 
