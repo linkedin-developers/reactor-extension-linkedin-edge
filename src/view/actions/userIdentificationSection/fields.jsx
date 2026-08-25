@@ -50,8 +50,9 @@ export default function ServerEventParametersFields() {
       <Content marginBottom="size-150">
         <Text>
           For tying the event to an user you need to fill in at least one of the
-          &rsquo;Email&rsquo;, <br />
-          or the &rsquo;LinkedIn First Party Ads Tracking UUID&rsquo; fields.
+          &rsquo;Email&rsquo;, the &rsquo;LinkedIn First Party Ads Tracking
+          UUID&rsquo;, the &rsquo;Google Advertising ID (GAID)&rsquo;, or the
+          &rsquo;IP Address&rsquo; fields.
         </Text>
       </Content>
 
@@ -89,6 +90,22 @@ export default function ServerEventParametersFields() {
             </Content>
           </ContextualHelp>
         }
+      />
+
+      <WrappedTextField
+        name="user_identification.gaid"
+        width="size-4600"
+        label="Google Advertising ID (GAID)"
+        description="Google Advertising ID for mobile app conversion tracking."
+        supportDataElement
+      />
+
+      <WrappedTextField
+        name="user_identification.ip_address"
+        width="size-4600"
+        label="IP Address (plain text)"
+        description="User's IP address for identity matching."
+        supportDataElement
       />
 
       <UserDataEditor

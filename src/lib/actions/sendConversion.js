@@ -14,6 +14,14 @@ const { emailNormalizer } = require('./helpers/normalizers');
 
 /* eslint-disable camelcase */
 
+// Maps user_identification keys to the idType values expected by the
+// LinkedIn Conversions API for identifiers that don't simply uppercase
+// to their idType (e.g. Google Advertising ID, plaintext IP address).
+const ID_TYPE_MAP = Object.freeze({
+  gaid: 'GOOGLE_AID',
+  ip_address: 'PLAINTEXT_IP_ADDRESS'
+});
+
 // Maps legacy user_data field names (from configs saved before a schema/view
 // rename) to their current equivalents so older action settings keep working.
 const LEGACY_USER_DATA_FIELD_MAP = Object.freeze({
@@ -55,7 +63,7 @@ const buildFetchObject = async ({
 
   event.user = {};
   event.user.userIds = Object.keys(user_identification).map((k) => ({
-    idType: k.toUpperCase(),
+    idType: ID_TYPE_MAP[k] || k.toUpperCase(),
     idValue: user_identification[k]
   }));
   event.user.userInfo = migrateLegacyUserData(user_data);

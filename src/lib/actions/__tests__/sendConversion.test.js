@@ -358,4 +358,48 @@ describe('Send Conversion library module', () => {
       expect(parsedBody.user.userInfo).toBeUndefined();
     });
   });
+
+  test('maps gaid to GOOGLE_AID idType', () => {
+    const fetch = jest.fn(() => Promise.resolve({}));
+
+    const utils = {
+      fetch,
+      getSettings: () => ({
+        user_identification: { gaid: 'abcd-1234' },
+        event: { conversion: '12345', conversionHappenedAt: 123 },
+        authentication: { accessToken: 'tsecret' }
+      }),
+      getExtensionSettings: () => ({})
+    };
+
+    return sendWebConversion({ arc, utils }).then(() => {
+      const fetchOptions = fetch.mock.calls[0][1];
+      const parsedBody = JSON.parse(fetchOptions.body);
+      expect(parsedBody.user.userIds).toEqual([
+        { idType: 'GOOGLE_AID', idValue: 'abcd-1234' }
+      ]);
+    });
+  });
+
+  test('maps ip_address to PLAINTEXT_IP_ADDRESS idType', () => {
+    const fetch = jest.fn(() => Promise.resolve({}));
+
+    const utils = {
+      fetch,
+      getSettings: () => ({
+        user_identification: { ip_address: '192.168.0.1' },
+        event: { conversion: '12345', conversionHappenedAt: 123 },
+        authentication: { accessToken: 'tsecret' }
+      }),
+      getExtensionSettings: () => ({})
+    };
+
+    return sendWebConversion({ arc, utils }).then(() => {
+      const fetchOptions = fetch.mock.calls[0][1];
+      const parsedBody = JSON.parse(fetchOptions.body);
+      expect(parsedBody.user.userIds).toEqual([
+        { idType: 'PLAINTEXT_IP_ADDRESS', idValue: '192.168.0.1' }
+      ]);
+    });
+  });
 });

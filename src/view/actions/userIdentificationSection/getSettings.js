@@ -27,7 +27,12 @@ export default ({
   let data;
 
   const settings = {};
-  ['sha256_email', 'linkedin_first_party_ads_tracking_uuid'].forEach((key) => {
+  [
+    'sha256_email',
+    'linkedin_first_party_ads_tracking_uuid',
+    'gaid',
+    'ip_address'
+  ].forEach((key) => {
     if (user_identification[key]) {
       if (!settings.user_identification) {
         settings.user_identification = {};
