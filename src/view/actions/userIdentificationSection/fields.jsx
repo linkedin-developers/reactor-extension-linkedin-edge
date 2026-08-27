@@ -56,6 +56,16 @@ export default function ServerEventParametersFields() {
         </Text>
       </Content>
 
+      <Badge variant="info" marginBottom="size-100">
+        <Info aria-label="Information about field hashing" />
+        <Text>
+          Before sending the data to the LinkedIn Conversions API, the extension
+          will hash and normalize the value of the Email field. The extension
+          will not hash the value of this field if a SHA256 string is already
+          present.
+        </Text>
+      </Badge>
+
       <WrappedTextField
         name="user_identification.sha256_email"
         width="size-4600"
@@ -186,16 +196,6 @@ export default function ServerEventParametersFields() {
           // END: Auto Update Data Content
         }}
       />
-
-      <Badge variant="info" marginTop="size-100">
-        <Info aria-label="Information about field hashing" />
-        <Text>
-          Before sending the data to the LinkedIn API endpoint, the extension
-          will hash and normalize the value of the Email field. The extension
-          will not hash the value of this field if a SHA256 string is already
-          present.
-        </Text>
-      </Badge>
     </View>
   );
 }
