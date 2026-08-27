@@ -60,6 +60,10 @@ export default function ServerEventParametersFields() {
         name="user_identification.sha256_email"
         width="size-4600"
         label="Email"
+        description={
+          'SHA256 hash recommended. Plain text emails will be ' +
+          'automatically hashed to SHA-256.'
+        }
         supportDataElement
       />
 
@@ -104,7 +108,10 @@ export default function ServerEventParametersFields() {
         name="user_identification.ip_address"
         width="size-4600"
         label="IP Address (plain text)"
-        description="User's IP address for identity matching."
+        description={
+          "User's IP address for identity matching. Plain text format, " +
+          'currently only IPv4 addresses are supported.'
+        }
         supportDataElement
       />
 
