@@ -91,6 +91,19 @@ export default function ServerEventParametersFields() {
                 in order to activate first party cookies that append a click ID{' '}
                 <strong>li_fat_id</strong> to the clicked URLs.
               </p>
+              <p>
+                Learn more about enabling and capturing click ids{' '}
+                <Link>
+                  <a
+                    href="https://learn.microsoft.com/en-us/linkedin/marketing/conversions/enabling-first-party-cookies"
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    here
+                  </a>
+                </Link>
+                .
+              </p>
             </Content>
           </ContextualHelp>
         }
