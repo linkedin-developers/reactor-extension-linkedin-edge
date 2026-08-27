@@ -49,8 +49,8 @@ export default function ServerEventParametersFields() {
 
       <Content marginBottom="size-150">
         <Text>
-          For tying the event to an user you need to fill in at least one of the
-          &rsquo;Email&rsquo;, the &rsquo;LinkedIn First Party Ads Tracking
+          For matching the event to an user you need to fill in at least one of
+          the &rsquo;Email&rsquo;, the &rsquo;LinkedIn First Party Ads Tracking
           UUID&rsquo;, the &rsquo;Google Advertising ID (GAID)&rsquo;, or the
           &rsquo;IP Address&rsquo; fields.
         </Text>
