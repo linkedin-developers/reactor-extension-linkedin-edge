@@ -10,10 +10,10 @@ governing permissions and limitations under the License.
 */
 
 const userAttributes = [
-  { id: 'title', name: 'Title' },
-  { id: 'companyName', name: 'Company Name' },
-  { id: 'lastName', name: 'Last Name' },
   { id: 'firstName', name: 'First Name' },
+  { id: 'lastName', name: 'Last Name' },
+  { id: 'companyName', name: 'Company Name' },
+  { id: 'title', name: 'Title' },
   { id: 'countryCode', name: 'Country Code' }
 ];
 

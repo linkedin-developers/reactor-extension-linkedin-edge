@@ -49,17 +49,31 @@ export default function ServerEventParametersFields() {
 
       <Content marginBottom="size-150">
         <Text>
-          For tying the event to an user you need to fill in at least one of the
-          &rsquo;Email&rsquo;, the &rsquo;LinkedIn First Party Ads Tracking
+          For matching the event to an user you need to fill in at least one of
+          the &rsquo;Email&rsquo;, the &rsquo;LinkedIn First Party Ads Tracking
           UUID&rsquo;, the &rsquo;Google Advertising ID (GAID)&rsquo;, or the
           &rsquo;IP Address&rsquo; fields.
         </Text>
       </Content>
 
+      <Badge variant="info" marginBottom="size-100">
+        <Info aria-label="Information about field hashing" />
+        <Text>
+          Before sending the data to the LinkedIn Conversions API, the extension
+          will hash and normalize the value of the Email field. The extension
+          will not hash the value of this field if a SHA256 string is already
+          present.
+        </Text>
+      </Badge>
+
       <WrappedTextField
         name="user_identification.sha256_email"
         width="size-4600"
         label="Email"
+        description={
+          'SHA256 hash recommended. Plain text emails will be ' +
+          'automatically hashed to SHA-256.'
+        }
         supportDataElement
       />
 
@@ -87,6 +101,19 @@ export default function ServerEventParametersFields() {
                 in order to activate first party cookies that append a click ID{' '}
                 <strong>li_fat_id</strong> to the clicked URLs.
               </p>
+              <p>
+                Learn more about enabling and capturing click ids{' '}
+                <Link>
+                  <a
+                    href="https://learn.microsoft.com/en-us/linkedin/marketing/conversions/enabling-first-party-cookies"
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    here
+                  </a>
+                </Link>
+                .
+              </p>
             </Content>
           </ContextualHelp>
         }
@@ -104,7 +131,10 @@ export default function ServerEventParametersFields() {
         name="user_identification.ip_address"
         width="size-4600"
         label="IP Address (plain text)"
-        description="User's IP address for identity matching."
+        description={
+          "User's IP address for identity matching. Plain text format, " +
+          'currently only IPv4 addresses are supported.'
+        }
         supportDataElement
       />
 
@@ -166,16 +196,6 @@ export default function ServerEventParametersFields() {
           // END: Auto Update Data Content
         }}
       />
-
-      <Badge variant="info" marginTop="size-100">
-        <Info aria-label="Information about field hashing" />
-        <Text>
-          Before sending the data to the LinkedIn API endpoint, the extension
-          will hash and normalize the value of the Email field. The extension
-          will not hash the value of this field if a SHA256 string is already
-          present.
-        </Text>
-      </Badge>
     </View>
   );
 }
