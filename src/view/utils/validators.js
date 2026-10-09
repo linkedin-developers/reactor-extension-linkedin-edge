@@ -28,5 +28,8 @@ export const isValidJson = (value) => {
 
 export const isDataElementToken = (value) => /^{{([^}]+)}}$/.test(value);
 
+export const isSha256Hex = (value) =>
+  typeof value === 'string' && /^[0-9A-Fa-f]{64}$/.test(value);
+
 export const isString = (value) =>
   typeof value === 'string' || value instanceof String;

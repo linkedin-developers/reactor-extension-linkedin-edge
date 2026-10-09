@@ -62,6 +62,10 @@
                   "ip_address": {
                     "type": "string",
                     "minLength": 1
+                  },
+                  "sha256_ip_address": {
+                    "type": "string",
+                    "minLength": 1
                   }
                 },
                 "required": ["sha256_email"],
@@ -83,6 +87,10 @@
                     "minLength": 1
                   },
                   "ip_address": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "sha256_ip_address": {
                     "type": "string",
                     "minLength": 1
                   }
@@ -108,6 +116,10 @@
                   "ip_address": {
                     "type": "string",
                     "minLength": 1
+                  },
+                  "sha256_ip_address": {
+                    "type": "string",
+                    "minLength": 1
                   }
                 },
                 "required": ["gaid"],
@@ -131,9 +143,40 @@
                   "ip_address": {
                     "type": "string",
                     "minLength": 1
+                  },
+                  "sha256_ip_address": {
+                    "type": "string",
+                    "minLength": 1
                   }
                 },
                 "required": ["ip_address"],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "sha256_email": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "linkedin_first_party_ads_tracking_uuid": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "gaid": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "ip_address": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "sha256_ip_address": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": ["sha256_ip_address"],
                 "additionalProperties": false
               }
             ]
@@ -195,6 +238,14 @@
                 "minLength": 1
               },
               "firstName": {
+                "type": "string",
+                "minLength": 1
+              },
+              "hashedLastName": {
+                "type": "string",
+                "minLength": 1
+              },
+              "hashedFirstName": {
                 "type": "string",
                 "minLength": 1
               },

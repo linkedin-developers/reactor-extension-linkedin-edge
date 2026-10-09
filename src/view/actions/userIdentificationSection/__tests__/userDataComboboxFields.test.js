@@ -34,4 +34,13 @@ describe('userDataComboboxFields', () => {
       'Country Code'
     );
   });
+
+  test('maps hashed name display names and ids', () => {
+    expect(userDataComboboxFields.getUserDataId('Hashed First Name')).toBe(
+      'hashedFirstName'
+    );
+    expect(userDataComboboxFields.getUserDataName('hashedLastName')).toBe(
+      'Hashed Last Name'
+    );
+  });
 });

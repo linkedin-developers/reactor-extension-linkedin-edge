@@ -13,7 +13,11 @@ governing permissions and limitations under the License.
 /* eslint-disable camelcase */
 
 import parseJson from '../../utils/parseJson';
-import { isObject, isDataElementToken } from '../../utils/validators';
+import {
+  isObject,
+  isDataElementToken,
+  isSha256Hex
+} from '../../utils/validators';
 
 export default ({
   user_identification = {},
@@ -26,22 +30,34 @@ export default ({
     sha256_email,
     linkedin_first_party_ads_tracking_uuid,
     gaid,
-    ip_address
+    ip_address,
+    sha256_ip_address
   } = user_identification;
 
   if (
     !sha256_email &&
     !linkedin_first_party_ads_tracking_uuid &&
     !gaid &&
-    !ip_address
+    !ip_address &&
+    !sha256_ip_address
   ) {
     const msg =
       // eslint-disable-next-line max-len
-      'Please provide an "Email", a "LinkedIn First Party Ads Tracking UUID", a "Google Advertising ID (GAID)", or an "IP Address".';
+      'Please provide an "Email", a "LinkedIn First Party Ads Tracking UUID", a "Google Advertising ID (GAID)", an "IP Address", or a "SHA256 hashed IP Address".';
     errors['user_identification.sha256_email'] = msg;
     errors['user_identification.linkedin_first_party_ads_tracking_uuid'] = msg;
     errors['user_identification.gaid'] = msg;
     errors['user_identification.ip_address'] = msg;
+    errors['user_identification.sha256_ip_address'] = msg;
+  }
+
+  if (
+    sha256_ip_address &&
+    !isDataElementToken(sha256_ip_address) &&
+    !isSha256Hex(sha256_ip_address)
+  ) {
+    errors['user_identification.sha256_ip_address'] =
+      'Please provide a valid SHA256 hash (64-character HEX string).';
   }
 
   if (userDataType === 'raw') {
