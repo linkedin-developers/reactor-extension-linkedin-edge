@@ -31,7 +31,8 @@ export default ({
     'sha256_email',
     'linkedin_first_party_ads_tracking_uuid',
     'gaid',
-    'ip_address'
+    'ip_address',
+    'sha256_ip_address'
   ].forEach((key) => {
     if (user_identification[key]) {
       if (!settings.user_identification) {

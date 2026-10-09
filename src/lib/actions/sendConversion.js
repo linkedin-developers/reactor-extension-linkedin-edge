@@ -11,6 +11,7 @@ governing permissions and limitations under the License.
 */
 
 const { emailNormalizer } = require('./helpers/normalizers');
+const isSha256String = require('./helpers/isSha256String');
 
 /* eslint-disable camelcase */
 
@@ -47,12 +48,36 @@ const migrateLegacyUserData = (userData) => {
   return migrated;
 };
 
+const HASHED_FIELDS = Object.freeze({
+  user_identification: ['sha256_ip_address'],
+  user_data: ['hashedFirstName', 'hashedLastName']
+});
+
+const validateHashedFields = (user_identification, user_data) => {
+  const sources = { user_identification, user_data };
+  Object.entries(HASHED_FIELDS).forEach(([section, fields]) => {
+    fields.forEach((field) => {
+      const value = sources[section]?.[field];
+      if (
+        value !== undefined &&
+        (typeof value !== 'string' || !isSha256String(value))
+      ) {
+        throw new Error(
+          `${section}.${field} must be a SHA256 hash (64-character HEX string).`
+        );
+      }
+    });
+  });
+};
+
 const buildFetchObject = async ({
   settings: { event, user_identification, user_data },
   authentication: { accessToken },
   version,
   method
 }) => {
+  validateHashedFields(user_identification, user_data);
+
   const normalizers = [['sha256_email', emailNormalizer]];
 
   for await (const [field, normalizer] of normalizers) {
@@ -116,7 +141,7 @@ module.exports = async ({ utils }) => {
 
   const url = 'https://api.linkedin.com/rest/conversionEvents';
   const method = 'POST';
-  const version = '202605';
+  const version = '202609';
 
   return fetch(
     url,

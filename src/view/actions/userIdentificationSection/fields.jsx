@@ -138,6 +138,17 @@ export default function ServerEventParametersFields() {
         supportDataElement
       />
 
+      <WrappedTextField
+        name="user_identification.sha256_ip_address"
+        width="size-4600"
+        label="IP Address (SHA256 hashed)"
+        description={
+          "SHA256 hash of the user's IP address, as a 64-character " +
+          'HEX-encoded string. Currently only IPv4 addresses are supported.'
+        }
+        supportDataElement
+      />
+
       <UserDataEditor
         label="Customer information data"
         radioLabel="Select the way you want to provide the user atrributes"

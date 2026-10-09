@@ -402,4 +402,86 @@ describe('Send Conversion library module', () => {
       ]);
     });
   });
+
+  describe('hashed identifiers (version 202609)', () => {
+    const HASH_A = 'a'.repeat(64);
+    const HASH_B = 'b'.repeat(64);
+    const HASH_C = 'C'.repeat(64);
+
+    const run = (settings) => {
+      const fetch = jest.fn(() => Promise.resolve({}));
+      const utils = {
+        fetch,
+        getSettings: () => ({
+          ...settings,
+          authentication: { accessToken: 'tsecret' }
+        }),
+        getExtensionSettings: () => ({})
+      };
+      return { fetch, promise: sendWebConversion({ arc, utils }) };
+    };
+
+    const baseEvent = { conversion: '12345', conversionHappenedAt: 123 };
+
+    test('sends LinkedIn-Version 202609', async () => {
+      const { fetch, promise } = run({
+        user_identification: { sha256_ip_address: HASH_A },
+        event: { ...baseEvent }
+      });
+      await promise;
+      expect(fetch.mock.calls[0][1].headers['LinkedIn-Version']).toBe('202609');
+    });
+
+    test('maps sha256_ip_address to SHA256_IP_ADDRESS alongside plaintext ip', async () => {
+      const { fetch, promise } = run({
+        user_identification: {
+          ip_address: '1.2.3.4',
+          sha256_ip_address: HASH_A
+        },
+        event: { ...baseEvent }
+      });
+      await promise;
+      const body = JSON.parse(fetch.mock.calls[0][1].body);
+      expect(body.user.userIds).toEqual([
+        { idType: 'PLAINTEXT_IP_ADDRESS', idValue: '1.2.3.4' },
+        { idType: 'SHA256_IP_ADDRESS', idValue: HASH_A }
+      ]);
+    });
+
+    test('passes hashed names through to userInfo with plain names', async () => {
+      const { fetch, promise } = run({
+        user_identification: { sha256_email: 'email@email.com' },
+        user_data: {
+          firstName: 'Mike',
+          hashedFirstName: HASH_B,
+          hashedLastName: HASH_C
+        },
+        event: { ...baseEvent }
+      });
+      await promise;
+      const body = JSON.parse(fetch.mock.calls[0][1].body);
+      expect(body.user.userInfo).toEqual({
+        firstName: 'Mike',
+        hashedFirstName: HASH_B,
+        hashedLastName: HASH_C
+      });
+    });
+
+    test.each([
+      ['sha256_ip_address', 'user_identification', { sha256_ip_address: 'x' }],
+      ['hashedFirstName', 'user_data', { hashedFirstName: 'x'.repeat(64) }],
+      ['hashedLastName', 'user_data', { hashedLastName: HASH_A + 'a' }]
+    ])('rejects invalid %s', async (field, section, value) => {
+      const settings = {
+        user_identification: { sha256_email: 'email@email.com' },
+        event: { ...baseEvent }
+      };
+      settings[section] = { ...settings[section], ...value };
+      const { fetch, promise } = run(settings);
+      await expect(promise).rejects.toThrow(
+        `${section}.${field} must be a SHA256 hash`
+      );
+      expect(fetch).not.toHaveBeenCalled();
+    });
+  });
 });
